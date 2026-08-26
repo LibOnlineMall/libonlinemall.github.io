@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LibOnlineMall — Liberia's Online Marketplace</title>
+<meta name="description" content="LibOnlineMall — Buy and sell products and services in Liberia." />
+
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7f9;
+  color: #18212b;
+  -webkit-font-smoothing:antialiased;
+}
+header {
+  background: #0b7a53;
+  color: white;
+  padding: 18px 5%;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.nav {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+.logo { font-size: 24px; font-weight: 800; }
+.tag { font-size: 12px; opacity: .9; }
+button { cursor: pointer; }
+.sell {
+  background: white;
+  color: #0b7a53;
+  border: 0;
+  border-radius: 8px;
+  padding: 11px 15px;
+  font-weight: 700;
+}
+.hero {
+  background: white;
+  padding: 45px 5% 30px;
+}
+.hero-inner { max-width: 1100px; margin: auto; }
+h1 { font-size: 38px; margin: 0 0 10px; }
+.hero p { color: #667085; }
+.search { display: flex; max-width: 700px; margin-top: 22px; }
+.search input {
+  flex: 1;
+  padding: 15px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px 0 0 8px;
+  font-size: 16px;
+}
+.search button {
+  padding: 0 20px;
+  border: 0;
+  background: #0b7a53;
+  color: white;
+  border-radius: 0 8px 8px 0;
+}
+main { max-width: 1100px; margin: 28px auto; padding: 0 5%; }
+.section-title { display: flex; justify-content: space-between; align-items: center; margin: 25px 0 15px; }
+.categories { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.cat {
+  background: white;
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s;
+}
+.cat:hover { border-color: #0b7a53; transform: translateY(-2px); }
+.cat.active { background: #0b7a53; color: white; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e4e7ec;
+  display: flex;
+  flex-direction: column;
+}
+.pic {
+  height: 150px;
+  background: #e9eef2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  overflow: hidden;
+}
+.pic img {
+  max-height: 150px;
+  width: 100%;
+  object-fit: cover;
+}
+.pic video {
+  max-height: 150px;
+  width: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+.body { padding: 14px; flex: 1; display:flex; flex-direction:column; }
+.price { font-size: 19px; font-weight: 800; color: #0b7a53; margin-top: 6px; }
+.meta { font-size: 13px; color: #667085; margin-top: 6px; }
+.contact {
+  display: block;
+  text-align: center;
+  background: #0b7a53;
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 7px;
+  margin-top: auto;
+}
+.contact.disabled {
+  background: #98a2b3;
+  pointer-events: none;
+}
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.card-actions button {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 12px;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.delete-btn {
+  background: #b42318;
+  color: white;
+  font-weight: 600;
+}
+.delete-btn:hover { background: #8b1a13; }
+.video-btn {
+  background: #667085;
+  color: white;
+  font-weight: 600;
+}
+.video-btn:hover { background: #4d5564; }
+.form-box {
+  background: white;
+  padding: 20px;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  max-width: 650px;
+  margin-bottom: 20px;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+textarea { min-height: 100px; resize: vertical; }
+.primary-btn {
+  margin-top: 5px;
+  background: #0b7a53;
+  color: white;
+  border: 0;
+  padding: 12px 18px;
+  border-radius: 7px;
+  font-weight: 700;
+}
+.primary-btn:disabled {
+  background: #98a2b3;
+  cursor: not-allowed;
+}
+.secondary-btn {
+  background: #667085;
+  color: white;
+  border: 0;
+  padding: 12px 18px;
+  border-radius: 7px;
+  font-weight: 700;
+}
+.danger-btn {
+  background: #b42318;
+  color: white;
+  border: 0;
+  padding: 10px 16px;
+  border-radius: 7px;
+  font-weight: 700;
+}
+.note {
+  background: #fff8e6;
+  border: 1px solid #f2d28b;
+  padding: 13px;
+  border-radius: 9px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+.message { margin-top: 12px; font-size: 14px; font-weight: 600; color: #0b7a53; }
+.dashboard {
+  background: white;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+.seller-products-section {
+  margin-top: 30px;
+  border-top: 1px solid #e4e7ec;
+  padding-top: 20px;
+}
+.seller-products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 15px;
+}
+.seller-product-card {
+  background: #f9fafb;
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+.seller-product-name {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.seller-product-price {
+  color: #0b7a53;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.seller-product-meta {
+  font-size: 12px;
+  color: #667085;
+  margin-bottom: 10px;
+}
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+.modal-backdrop.active {
+  display: flex;
+}
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 20px;
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #e4e7ec;
+  border: 0;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+}
+.modal-video {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 10px;
+}
+#seller, #seller-dashboard { scroll-margin-top: 90px; }
+footer {
+  margin-top: 50px;
+  background: #17212b;
+  color: #d0d5dd;
+  padding: 30px 5%;
+  text-align: center;
+}
+.hidden { display: none !important; }
+@media(max-width:700px) {
+  h1 { font-size: 29px; }
+  .categories { grid-template-columns: repeat(2, 1fr); }
+  .grid { grid-template-columns: 1fr; }
+  .nav { align-items: flex-start; }
+  .logo { font-size: 20px; }
+  .sell { padding: 9px 11px; }
+  .search { width: 100%; }
+  .seller-products-grid { grid-template-columns: 1fr; }
+}
+.form-error { color: #b42318; font-weight:600; margin-top:8px;}
+.small { font-size:13px; color:#667085;}
+.loading { opacity: 0.6; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header>
+  <div class="nav">
+    <div>
+      <div class="logo">🇱🇷 LibOnlineMall</div>
+      <div class="tag">Liberia's Online Marketplace</div>
+    </div>
+
+    <button class="sell" id="sell-cta">+ Sell Something</button>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Buy & Sell in Liberia.</h1>
+    <p>Find products and services from sellers across Liberia.</p>
+
+    <div class="search" role="search" aria-label="Search products">
+      <input id="search" type="text"
+             placeholder="Search phones, shoes, cars, furniture..."
+             aria-label="Search products"
+      />
+      <button id="search-btn">Search</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MAIN ================= -->
+<main>
+  <!-- ================= WEEKLY VISITS ================= -->
+<div class="site-stat" style="margin: 20px 0; padding: 14px; background: white; border: 1px solid #e4e7ec; border-radius: 10px; text-align: center; font-weight: 700;">
+  👥 <span id="weekly-visits-count">0</span> visits this week
+</div>
+  <!-- CATEGORIES -->
+  <div class="section-title">
+    <h2>Categories</h2>
+  </div>
+
+  <div class="categories" id="categories">
+    <div class="cat" data-cat="Electronics">📱<br>Electronics</div>
+    <div class="cat" data-cat="Fashion">👕<br>Fashion</div>
+    <div class="cat" data-cat="Vehicles">🚗<br>Vehicles</div>
+    <div class="cat" data-cat="Home">🛋️<br>Home & Furniture</div>
+    <div class="cat" data-cat="Computers">💻<br>Computers</div>
+    <div class="cat" data-cat="Sports">🏋️<br>Sports</div>
+    <div class="cat" data-cat="Property">🏠<br>Property</div>
+    <div class="cat" data-cat="Services">🔧<br>Services</div>
+  </div>
+
+  <!-- LISTINGS -->
+  <div class="section-title">
+    <h2>Latest Listings</h2>
+  </div>
+
+  <div id="products" class="grid" aria-live="polite"></div>
+
+  <!-- ================= SELLER AREA ================= -->
+  <div id="seller" class="section-title">
+    <h2>Sell on LibOnlineMall</h2>
+  </div>
+
+  <div class="note">Create a seller account to list your products on LibOnlineMall.</div>
+
+  <!-- ================= REGISTER ================= -->
+  <div id="seller-account" class="form-box">
+    <h3>Create a Seller Account</h3>
+    <label class="small">Email address</label>
+    <input id="seller-email" type="email" placeholder="Email address" />
+
+    <label class="small">Password (minimum 6 characters)</label>
+    <input id="seller-password" type="password" placeholder="Password (minimum 6 characters)" />
+
+    <label class="small">Full name</label>
+    <input id="seller-name" type="text" placeholder="Full name" aria-label="Full name" />
+
+    <label class="small">Business name (optional)</label>
+    <input id="seller-business" type="text" placeholder="Business name (optional)" />
+
+    <label class="small">WhatsApp number</label>
+    <input id="seller-phone" type="tel" placeholder="WhatsApp number" />
+
+    <label class="small">Location</label>
+    <input id="seller-location" type="text" placeholder="Location" />
+
+    <button type="button" class="primary-btn" id="create-seller-btn">Create Seller Account</button>
+    <p id="seller-message" class="message" aria-live="polite"></p>
+    <p id="seller-error" class="form-error" aria-live="polite"></p>
+  </div>
+
+  <!-- ================= LOGIN ================= -->
+  <div id="seller-login" class="form-box">
+    <h3>Seller Login</h3>
+
+    <label class="small">Email address</label>
+    <input id="login-email" type="email" placeholder="Email address" />
+
+    <label class="small">Password</label>
+    <input id="login-password" type="password" placeholder="Password" />
+
+    <button type="button" class="primary-btn" id="login-btn">Login</button>
+    <p id="login-message" class="message" aria-live="polite"></p>
+    <p id="login-error" class="form-error" aria-live="polite"></p>
+  </div>
+
+  <!-- ================= SELLER DASHBOARD ================= -->
+  <section id="seller-dashboard" class="dashboard hidden" aria-live="polite">
+    <div class="section-title">
+      <h2>Seller Dashboard</h2>
+      <button class="danger-btn" id="logout-btn">Logout</button>
+    </div>
+
+    <h3 id="seller-welcome">Welcome, Seller!</h3>
+    <p>Manage your LibOnlineMall account and products here.</p>
+
+    <button class="primary-btn" id="add-product-btn">+ Add Product</button>
+
+    <!-- SELLER ANALYTICS -->
+<div class="seller-analytics">
+
+  <div class="analytics-card">
+    <div class="analytics-icon">📦</div>
+    <div class="analytics-number" id="seller-product-count">0</div>
+    <div class="analytics-label">Products</div>
+  </div>
+
+  <div class="analytics-card">
+    <div class="analytics-icon">👁</div>
+    <div class="analytics-number" id="seller-video-views">0</div>
+    <div class="analytics-label">Video Views</div>
+  </div>
+
+</div>
+    <!-- MY LISTINGS -->
+    <div class="seller-products-section hidden" id="my-listings-section">
+      <h3>My Listings</h3>
+      <div id="seller-products" class="seller-products-grid"></div>
+    </div>
+
+    <!-- ADD PRODUCT -->
+    <div id="add-product-form" class="form-box hidden" style="margin-top:20px;">
+      <h3>Add Product</h3>
+
+      <label class="small">Product name</label>
+      <input id="product-name" type="text" placeholder="Product name" />
+
+      <label class="small">Price (USD)</label>
+      <input id="product-price" type="number" min="0" step="0.01" placeholder="Price (USD)" />
+
+      <label class="small">Category</label>
+      <select id="product-category">
+        <option value="">Select Category</option>
+        <option>Electronics</option>
+        <option>Phones</option>
+        <option>Fashion</option>
+        <option>Home</option>
+        <option>Vehicles</option>
+        <option>Sports</option>
+        <option>Computers</option>
+        <option>Property</option>
+        <option>Services</option>
+        <option>Other</option>
+      </select>
+
+      <label class="small">Location</label>
+      <input id="product-location" type="text" placeholder="Location" />
+
+      <label class="small">WhatsApp Number</label>
+      <input id="product-whatsapp" type="tel" placeholder="WhatsApp Number" />
+
+      <label class="small">Describe your product</label>
+      <textarea id="product-description" placeholder="Describe your product"></textarea>
+
+      <p><strong>Product Photo</strong></p>
+      <input id="product-photo" type="file" accept="image/*" />
+
+      <p><strong>Product Video (Optional)</strong></p>
+      <input id="product-video" type="file" accept="video/mp4,video/quicktime" />
+      <p class="small">Maximum: 1 video • 60 seconds • 25 MB</p>
+
+      <button class="primary-btn" id="submit-product-btn">Post Product</button>
+      <button class="secondary-btn" id="cancel-product-btn" type="button">Cancel</button>
+
+      <p id="product-message" class="message" aria-live="polite"></p>
+      <p id="product-error" class="form-error" aria-live="polite"></p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <strong>LibOnlineMall</strong><br>
+  Buy & sell in Liberia.<br><br>
+  Prototype — more features coming.
+</footer>
+
+<!-- ================= VIDEO MODAL ================= -->
+<div class="modal-backdrop" id="video-modal" aria-hidden="true">
+  <div class="modal-content" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modal-close-btn" aria-label="Close">✕</button>
+    <video id="modal-video" class="modal-video" controls></video>
+  </div>
+</div>
+
+<!-- ================= SUPABASE SDK ================= -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+/* =====================================================
+   SUPABASE INITIALIZATION
+   ===================================================== */
+const SUPABASE_URL = 'https://gvzxefrmhvqmkehbrult.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_uelg3cyss3Odnl9nuqeZ6w_rryTkSJC';
+
+// The CDN exposes a global `supabase` object with createClient() — avoid shadowing it.
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const PRODUCT_IMAGES_BUCKET = 'product-images';
+const PRODUCT_VIDEOS_BUCKET = 'product-videos';
+
+let currentUser = null;
+let products = [];
+let selectedCategory = null;
+  /* =====================================================
+   LIBONLINEMALL ANALYTICS
+   ===================================================== */
+
+// Record every page load / refresh
+async function recordSiteVisit() {
+  try {
+    const { error } = await supabaseClient
+      .from("site_visits")
+      .insert([{}]);
+
+    if (error) {
+      console.error("SITE VISIT ERROR:", error);
+    }
+  } catch (error) {
+    console.error("SITE VISIT ERROR:", error);
+  }
+}
+
+// Get visits from the last 7 days
+async function updateWeeklyVisits() {
+  try {
+    const { data, error } = await supabaseClient
+      .rpc("get_weekly_site_visits");
+
+    if (error) {
+      console.error("WEEKLY VISITS ERROR:", error);
+      return;
+    }
+
+    const countElement =
+      document.getElementById("weekly-visits-count");
+
+    if (countElement) {
+      countElement.textContent = Number(data) || 0;
+    }
+  } catch (error) {
+    console.error("WEEKLY VISITS ERROR:", error);
+  }
+}
+
+// Record a product video view
+async function recordVideoView(productId) {
+  if (!productId) return;
+
+  try {
+    const { error } = await supabaseClient
+      .from("product_video_views")
+      .insert([
+        {
+          product_id: productId
+        }
+      ]);
+
+    if (error) {
+      console.error("VIDEO VIEW ERROR:", error);
+    }
+  } catch (error) {
+    console.error("VIDEO VIEW ERROR:", error);
+  }
+}
+// Get total video views for a product
+async function getVideoViews(productId) {
+  if (!productId) return 0;
+
+  try {
+    const { data, error } = await supabaseClient
+      .rpc("get_product_video_views", {
+        product_uuid: productId
+      });
+
+    if (error) {
+      console.error("VIDEO VIEW COUNT ERROR:", error);
+      return 0;
+    }
+
+    return Number(data) || 0;
+  } catch (error) {
+    console.error("VIDEO VIEW COUNT ERROR:", error);
+    return 0;
+  }
+  }
+  // Display the video view count
+async function displayVideoViews(productId) {
+  if (!productId) return;
+
+  const countElement =
+    document.getElementById(`video-views-${productId}`);
+
+  if (!countElement) return;
+
+  const count = await getVideoViews(productId);
+
+  countElement.textContent = `👁 ${count} views`;
+}
+// Record this page load
+recordSiteVisit();
+
+// Update visible weekly visit number
+updateWeeklyVisits();
+  // ================= PRODUCT SUBMISSION =================
+
+const submitProductBtn = document.getElementById("submit-product-btn");
+const productMessage = document.getElementById("product-message");
+const productError = document.getElementById("product-error");
+
+submitProductBtn.addEventListener("click", async function () {
+  productMessage.textContent = "";
+  productError.textContent = "";
+
+  try {
+    // Check logged-in seller
+    const { data: { user }, error: userError } =
+      await supabaseClient.auth.getUser();
+
+    if (userError || !user) {
+      throw new Error("Please log in as a seller before submitting a product.");
+    }
+
+    currentUser = user;
+
+    // Get form values
+    const name = document.getElementById("product-name").value.trim();
+    const price = parseFloat(document.getElementById("product-price").value);
+    const category = document.getElementById("product-category").value;
+    const location = document.getElementById("product-location").value.trim();
+    const whatsapp = document.getElementById("product-whatsapp").value.trim();
+    const description = document.getElementById("product-description").value.trim();
+
+    const photoInput = document.getElementById("product-photo");
+    const videoInput = document.getElementById("product-video");
+
+    // Validation
+    if (!name) throw new Error("Please enter a product name.");
+    if (isNaN(price) || price < 0) throw new Error("Please enter a valid price.");
+    if (!category) throw new Error("Please select a category.");
+    if (!location) throw new Error("Please enter your location.");
+    if (!whatsapp) throw new Error("Please enter your WhatsApp number.");
+    if (!description) throw new Error("Please describe your product.");
+    if (!photoInput.files.length) throw new Error("Please select a product photo.");
+
+    submitProductBtn.disabled = true;
+    productMessage.textContent = "Uploading product...";
+
+    // ================= PHOTO UPLOAD =================
+
+    const photo = photoInput.files[0];
+
+    const photoExt = photo.name.split(".").pop();
+    const photoPath =
+      `${user.id}/${Date.now()}-product.${photoExt}`;
+
+    const { error: photoError } = await supabaseClient.storage
+      .from(PRODUCT_IMAGES_BUCKET)
+      .upload(photoPath, photo, {
+        upsert: false
+      });
+
+    if (photoError) {
+      throw new Error("Photo upload failed: " + photoError.message);
+    }
+
+    const { data: photoUrlData } = supabaseClient.storage
+      .from(PRODUCT_IMAGES_BUCKET)
+      .getPublicUrl(photoPath);
+
+    const imageUrl = photoUrlData.publicUrl;
+
+    // ================= VIDEO UPLOAD =================
+
+    let videoUrl = null;
+
+    if (videoInput.files.length > 0) {
+      const video = videoInput.files[0];
+
+      if (video.size > 25 * 1024 * 1024) {
+        throw new Error("Video must be 25 MB or smaller.");
+      }
+
+      const videoExt = video.name.split(".").pop();
+      const videoPath =
+        `${user.id}/${Date.now()}-video.${videoExt}`;
+
+      const { error: videoError } = await supabaseClient.storage
+        .from(PRODUCT_VIDEOS_BUCKET)
+        .upload(videoPath, video, {
+          upsert: false
+        });
+
+      if (videoError) {
+        throw new Error("Video upload failed: " + videoError.message);
+      }
+
+      const { data: videoUrlData } = supabaseClient.storage
+        .from(PRODUCT_VIDEOS_BUCKET)
+        .getPublicUrl(videoPath);
+
+      videoUrl = videoUrlData.publicUrl;
+    }
+
+    // ================= DATABASE INSERT =================
+
+    productMessage.textContent = "Saving product...";
+
+    const { data, error } = await supabaseClient
+      .from("products")
+      .insert([{
+        seller_id: user.id,
+        name: name,
+        category: category,
+        price: price,
+        location: location,
+        whatsapp: whatsapp,
+        description: description,
+        image_url: imageUrl,
+        approval_status: "pending",
+        video_url: videoUrl
+      }])
+      .select();
+
+    if (error) {
+      throw new Error("Database error: " + error.message);
+    }
+
+    // Success
+    productMessage.textContent =
+      "Product submitted successfully and is awaiting approval.";
+
+    productError.textContent = "";
+
+    // Clear form
+    document.getElementById("product-name").value = "";
+    document.getElementById("product-price").value = "";
+    document.getElementById("product-category").value = "";
+    document.getElementById("product-location").value = "";
+    document.getElementById("product-whatsapp").value = "";
+    document.getElementById("product-description").value = "";
+    photoInput.value = "";
+    videoInput.value = "";
+
+    console.log("Product submitted:", data);
+
+  } catch (error) {
+    console.error("PRODUCT SUBMISSION ERROR:", error);
+
+    productMessage.textContent = "";
+    productError.textContent =
+  error.message || error.details || error.hint || String(error);
+
+  } finally {
+    submitProductBtn.disabled = false;
+  }
+});
+
+/* =====================================================
+   UTILITIES
+   ===================================================== */
+function escapeHtml(value) {
+  if (value === null || value === undefined) return "";
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function whatsappUrlFromRaw(raw) {
+  if (!raw) return null;
+  const digits = String(raw).replace(/\D/g, '');
+  if (!digits) return null;
+  let num = digits;
+  // If user enters a local Liberian format starting with 0, convert to +231
+  if (num.startsWith('0')) {
+    num = '231' + num.substring(1);
+  }
+  if (num.length < 7) return null;
+  return 'https://wa.me/' + num;
+}
+
+const usdFmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+function formatPrice(value) {
+  if (value === null || value === undefined || value === '') return '';
+  if (typeof value === 'number' && !Number.isNaN(value)) {
+    return usdFmt.format(value);
+  }
+  const n = Number(String(value).replace(/[^0-9.-]+/g, ''));
+  return Number.isNaN(n) ? escapeHtml(String(value)) : usdFmt.format(n);
+}
+
+/* =====================================================
+   RENDERING
+   ===================================================== */
+function renderProductCard(product, includeDelete = false) {
+  const photoHtml = product.image_url
+    ? `<div class="pic"><img src="${escapeHtml(product.image_url)}" alt="${escapeHtml(product.name)}" loading="lazy"></div>`
+    : `<div class="pic">🛍️</div>`;
+
+  const whatsappLink = whatsappUrlFromRaw(product.whatsapp);
+
+const whatsappMessage =
+  `Hi, I'm interested in your ${product.name} on LibOnlineMall. Is it still available?`;
+
+const whatsappLinkWithMessage = whatsappLink
+  ? `${whatsappLink}${whatsappLink.includes('?') ? '&' : '?'}text=${encodeURIComponent(whatsappMessage)}`
+  : '';
+  let videoHtml = '';
+
+if (product.video_url) {
+  const safeUrl = encodeURI(product.video_url);
+
+  videoHtml = `
+    <div class="video-section">
+      <button class="video-btn"
+        onclick="openVideoModal('${safeUrl}', '${escapeHtml(product.id)}')">
+        ▶ Watch Video
+      </button>
+
+      <span class="video-view-count"
+        id="video-views-${escapeHtml(product.id)}">
+        👁 0 views
+      </span>
+    </div>
+  `;
+}
+  let actionsHtml = '';
+  if (includeDelete) {
+    actionsHtml = `
+      <div class="card-actions">
+        ${videoHtml}
+        <button class="delete-btn" onclick="deleteProduct('${escapeHtml(product.id)}')">🗑 Delete</button>
+      </div>
+    `;
+  } else if (videoHtml) {
+    actionsHtml = `<div class="card-actions">${videoHtml}</div>`;
+  }
+
+  const contactHtml = whatsappLinkWithMessage
+  ? `<a class="contact" href="${escapeHtml(whatsappLinkWithMessage)}" target="_blank" rel="noopener noreferrer">💬 Contact Seller</a>`
+  : `<div class="contact disabled">Contact Seller</div>`;
+
+  return `
+    <div class="card" aria-label="${escapeHtml(product.name)}">
+      ${photoHtml}
+      <div class="body">
+        <strong>${escapeHtml(product.name)}</strong>
+        <div class="price">${formatPrice(product.price)}</div>
+        <div class="meta">${escapeHtml(product.location)} · ${escapeHtml(product.category)}</div>
+        ${contactHtml}
+        ${actionsHtml}
+      </div>
+    </div>
+  `;
+}
+
+function render(list = products) {
+  const container = document.getElementById('products');
+  if (!container) return;
+  if (!list || list.length === 0) {
+    container.innerHTML = `
+      <div class="form-box" role="status" aria-live="polite">
+        <strong>No products found.</strong>
+        <p>Try another search, or add a product.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = list.map(p => renderProductCard(p, false)).join('');
+
+list.forEach(product => {
+  if (product.video_url) {
+    displayVideoViews(product.id);
+  }
+});
+      }
+
+  async function updateSellerAnalytics() {
+  if (!currentUser) return;
+
+  try {
+    // Get this seller's products
+    const { data: sellerProducts, error } = await supabaseClient
+      .from("products")
+      .select("id")
+      .eq("seller_id", currentUser.id);
+
+    if (error) {
+      console.error("SELLER ANALYTICS ERROR:", error);
+      return;
+    }
+
+    // Total products
+    const productCount = sellerProducts?.length || 0;
+
+    const productCountElement =
+      document.getElementById("seller-product-count");
+
+    if (productCountElement) {
+      productCountElement.textContent = productCount;
+    }
+
+    // Total video views
+    let totalViews = 0;
+
+    if (sellerProducts && sellerProducts.length > 0) {
+      const productIds = sellerProducts.map(product => product.id);
+
+      const { data: views, error: viewsError } = await supabaseClient
+        .from("product_video_views")
+        .select("product_id")
+        .in("product_id", productIds);
+
+      if (viewsError) {
+        console.error("SELLER VIDEO VIEWS ERROR:", viewsError);
+      } else {
+        totalViews = views?.length || 0;
+      }
+    }
+
+    const viewsElement =
+      document.getElementById("seller-video-views");
+
+    if (viewsElement) {
+      viewsElement.textContent = totalViews;
+    }
+
+  } catch (error) {
+    console.error("SELLER ANALYTICS ERROR:", error);
+  }
+  }
+  
+function renderSellerProducts(sellerProducts) {
+  const container = document.getElementById('seller-products');
+  const section = document.getElementById('my-listings-section');
+
+  if (!sellerProducts || sellerProducts.length === 0) {
+    section.classList.add('hidden');
+    container.innerHTML = '';
+    return;
+  }
+
+  section.classList.remove('hidden');
+  container.innerHTML = sellerProducts.map(p => {
+    const photoUrl = p.image_url;
+    const photoHtml = photoUrl
+      ? `<div style="width:100%; height:80px; background:#e9eef2; border-radius:6px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; overflow:hidden;"><img src="${escapeHtml(photoUrl)}" alt="${escapeHtml(p.name)}" style="width:100%; height:100%; object-fit:cover;"></div>`
+      : `<div style="width:100%; height:80px; background:#e9eef2; border-radius:6px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; font-size:32px;">🛍️</div>`;
+
+    let videoBtn = '';
+    if (p.video_url) {
+      const safeUrl = encodeURI(p.video_url);
+      videoBtn = `<button class="video-btn" onclick="openVideoModal('${safeUrl}')" style="margin-bottom:8px;">▶ Watch Video</button>`;
+    }
+
+    return `
+      <div class="seller-product-card" aria-label="${escapeHtml(p.name)}">
+        ${photoHtml}
+        <div class="seller-product-name">${escapeHtml(p.name)}</div>
+        <div class="seller-product-price">${formatPrice(p.price)}</div>
+        <div class="seller-product-meta">${escapeHtml(p.category)} • ${escapeHtml(p.location)}</div>
+        ${videoBtn}
+        <button class="delete-btn" onclick="deleteProduct('${escapeHtml(p.id)}')" style="width:100%; margin-top:auto;">🗑 Delete Listing</button>
+      </div>
+    `;
+  }).join('');
+}
+
+/* =====================================================
+   AUTH STATE MANAGEMENT
+   ===================================================== */
+function updateAuthState() {
+  const accountForm = document.getElementById('seller-account');
+  const loginForm = document.getElementById('seller-login');
+  const dashboard = document.getElementById('seller-dashboard');
+  const welcome = document.getElementById('seller-welcome');
+
+  if (currentUser) {
+    if (accountForm) accountForm.classList.add('hidden');
+    if (loginForm) loginForm.classList.add('hidden');
+    if (dashboard) dashboard.classList.remove('hidden');
+    if (welcome) {
+      const userName = (currentUser.user_metadata && currentUser.user_metadata.full_name) || currentUser.email || 'Seller';
+      welcome.textContent = `Welcome, ${escapeHtml(userName)}!`;
+    }
+    loadSellerProducts();
+  } else {
+    if (accountForm) accountForm.classList.remove('hidden');
+    if (loginForm) loginForm.classList.remove('hidden');
+    if (dashboard) dashboard.classList.add('hidden');
+    hideAddProduct();
+  }
+}
+
+/* =====================================================
+   SEARCH & CATEGORY FILTER
+   ===================================================== */
+function filterProducts(query) {
+  const q = (query ?? document.getElementById('search').value ?? '').toLowerCase().trim();
+  let filtered = products.slice();
+
+  if (q) {
+    filtered = filtered.filter(product => {
+      const text = `${product.name || ''} ${product.location || ''} ${product.category || ''}`.toLowerCase();
+      return text.includes(q);
+    });
+  }
+
+  if (selectedCategory) {
+    filtered = filtered.filter(product => (product.category || '') === selectedCategory);
+  }
+
+  render(filtered);
+}
+
+/* =====================================================
+   VIDEO MODAL
+   ===================================================== */
+function openVideoModal(videoUrl, productId) {
+  const modal = document.getElementById('video-modal');
+  const video = document.getElementById('modal-video');
+
+  if (!modal || !video) return;
+
+  video.src = videoUrl;
+
+  // Count the video view when the video starts playing
+  video.onplay = function () {
+    recordVideoView(productId);
+  };
+
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden', 'false');
+  }
+
+document.getElementById('modal-close-btn').addEventListener('click', () => {
+  const modal = document.getElementById('video-modal');
+  const video = document.getElementById('modal-video');
+  if (!modal || !video) return;
+  video.pause();
+  video.src = '';
+  modal.classList.remove('active');
+  modal.setAttribute('aria-hidden', 'true');
+});
+
+document.getElementById('video-modal').addEventListener('click', (e) => {
+  if (e.target && e.target.id === 'video-modal') {
+    const modal = document.getElementById('video-modal');
+    const video = document.getElementById('modal-video');
+    if (!modal || !video) return;
+    video.pause();
+    video.src = '';
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+});
+
+/* =====================================================
+   LOAD PRODUCTS FROM SUPABASE
+   ===================================================== */
+async function loadProducts() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('products')
+      .select('*')
+      .eq('approval_status', 'approved');
+
+    if (error) {
+      console.error('Failed to load products:', error);
+      return;
+    }
+
+    products = data || [];
+    render(products);
+  } catch (err) {
+    console.error('Error loading products:', err);
+  }
+}
+
+async function loadSellerProducts() {
+  if (!currentUser) return;
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('products')
+      .select('*')
+      .eq('seller_id', currentUser.id);
+
+    if (error) {
+      console.error('Failed to load seller products:', error);
+      return;
+    }
+
+  renderSellerProducts(data || []);
+updateSellerAnalytics();
+  } catch (err) {
+    console.error('Error loading seller products:', err);
+  }
+}
+
+/* =====================================================
+   DELETE PRODUCT
+   ===================================================== */
+async function deleteProduct(productId) {
+  if (!productId) return;
+  if (!confirm('Are you sure you want to delete this listing?')) return;
+
+  if (!currentUser) { alert('Please log in to delete listings.'); return; }
+
+  try {
+    const { data: product, error: fetchError } = await supabaseClient
+      .from('products')
+      .select('*')
+      .eq('id', productId)
+      .single();
+
+    if (fetchError || !product) {
+      alert('Product not found.');
+      return;
+    }
+
+    if (product.seller_id !== currentUser.id) {
+      alert('You can only delete your own listings.');
+      return;
+    }
+
+    // Delete image from storage
+    if (product.image_url) {
+      const parts = product.image_url.split('/');
+      const imagePath = parts[parts.length - 1].split('?')[0];
+      await supabaseClient.storage.from(PRODUCT_IMAGES_BUCKET).remove([imagePath]).catch(() => {});
+    }
+
+    // Delete video from storage
+    if (product.video_url) {
+      const parts = product.video_url.split('/');
+      const videoPath = parts[parts.length - 1].split('?')[0];
+      await supabaseClient.storage.from(PRODUCT_VIDEOS_BUCKET).remove([videoPath]).catch(() => {});
+    }
+
+    // Delete product from database
+    const { error } = await supabaseClient
+      .from('products')
+      .delete()
+      .eq('id', productId);
+
+    if (error) {
+      console.error('Delete error:', error);
+      alert('Failed to delete listing.');
+      return;
+    }
+
+    alert('Listing deleted successfully.');
+    await loadSellerProducts();
+    await loadProducts();
+  } catch (err) {
+    console.error('Error deleting product:', err);
+    alert('An error occurred.');
+  }
+}
+
+/* =====================================================
+   AUTHENTICATION
+   ===================================================== */
+async function registerSeller() {
+  const email = (document.getElementById('seller-email').value || '').trim().toLowerCase();
+  const password = (document.getElementById('seller-password').value || '');
+  const name = (document.getElementById('seller-name').value || '').trim();
+  const business = (document.getElementById('seller-business').value || '').trim();
+  const phone = (document.getElementById('seller-phone').value || '').trim();
+  const location = (document.getElementById('seller-location').value || '').trim();
+
+  const errorEl = document.getElementById('seller-error');
+  const msgEl = document.getElementById('seller-message');
+  if (errorEl) errorEl.textContent = '';
+  if (msgEl) msgEl.textContent = '';
+
+  if (!email || !/^\S+@\S+\.\S+$/.test(email)) { if (errorEl) errorEl.textContent = 'Enter a valid email.'; return; }
+  if (!password || password.length < 6) { if (errorEl) errorEl.textContent = 'Password must be at least 6 characters.'; return; }
+  if (!name) { if (errorEl) errorEl.textContent = 'Please enter your full name.'; return; }
+
+  try {
+    // Supabase v2: pass metadata as the second argument
+    const { data, error } = await supabaseClient.auth.signUp(
+      { email, password },
+      { data: { full_name: name, business_name: business, phone, location } }
+      );
+
+    if (error) {
+      if (errorEl) errorEl.textContent = error.message || 'Sign up failed.';
+      return;
+    }
+
+    if (msgEl) msgEl.textContent = 'Account created. Please verify your email if required. You are now logged in.';
+    currentUser = data?.user || null;
+    updateAuthState();
+    // clear sensitive fields
+    const pwdEl = document.getElementById('seller-password');
+    if (pwdEl) pwdEl.value = '';
+  } catch (err) {
+    console.error('Registration error:', err);
+    if (errorEl) errorEl.textContent = 'An error occurred.';
+  }
+}
+
+async function loginSeller() {
+  const email = (document.getElementById('login-email').value || '').trim().toLowerCase();
+  const password = (document.getElementById('login-password').value || '');
+
+  const errorEl = document.getElementById('login-error');
+  const msgEl = document.getElementById('login-message');
+  if (errorEl) errorEl.textContent = '';
+  if (msgEl) msgEl.textContent = '';
+
+  if (!email || !password) { if (errorEl) errorEl.textContent = 'Enter email and password.'; return; }
+
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      if (errorEl) errorEl.textContent = error.message || 'Login failed.';
+      return;
+    }
+
+    if (msgEl) msgEl.textContent = 'Logged in.';
+    currentUser = data?.user || null;
+    // clear fields
+    const pwdEl = document.getElementById('login-password');
+    if (pwdEl) pwdEl.value = '';
+    updateAuthState();
+  } catch (err) {
+    console.error('Login error:', err);
+    if (errorEl) errorEl.textContent = 'An error occurred.';
+  }
+}
+
+async function logoutSeller() {
+  try {
+    await supabaseClient.auth.signOut();
+    currentUser = null;
+    updateAuthState();
+    const sellerMsg = document.getElementById('seller-message');
+    const loginMsg = document.getElementById('login-message');
+    if (sellerMsg) sellerMsg.textContent = '';
+    if (loginMsg) loginMsg.textContent = '';
+  } catch (err) {
+    console.error('Logout error:', err);
+  }
+}
+
+async function checkCurrentUser() {
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session && session.user) {
+      currentUser = session.user;
+      updateAuthState();
+    }
+  } catch (err) {
+    console.error('Session check error:', err);
+  }
+}
+
+/* =====================================================
+   PRODUCT ADD FLOW
+   ===================================================== */
+function showAddProduct() {
+  const el = document.getElementById('add-product-form');
+  if (el) el.classList.remove('hidden');
+  const errEl = document.getElementById('product-error');
+  const msgEl = document.getElementById('product-message');
+  if (errEl) errEl.textContent = '';
+  if (msgEl) msgEl.textContent = '';
+}
+
+function hideAddProduct() {
+  const form = document.getElementById('add-product-form');
+  if (form) form.classList.add('hidden');
+  ['product-name','product-price','product-category','product-location','product-whatsapp','product-description'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const photo = document.getElementById('product-photo');
+  const video = document.getElementById('product-video');
+  if (photo) photo.value = '';
+  if (video) video.value = '';
+  const errEl = document.getElementById('product-error');
+  const msgEl = document.getElementById('product-message');
+  if (errEl) errEl.textContent = '';
+  if (msgEl) msgEl.textContent = '';
+  const submitBtn = document.getElementById('submit-product-btn');
+  if (submitBtn) submitBtn.disabled = false;
+}
+
+async function submitProduct() {
+  if (!currentUser) { alert('Please log in as a seller to add products.'); return; }
+
+  const name = (document.getElementById('product-name').value || '').trim();
+  const priceRaw = document.getElementById('product-price').value;
+  const price = priceRaw === '' ? null : parseFloat(priceRaw);
+  const category = (document.getElementById('product-category').value || '').trim();
+  const location = (document.getElementById('product-location').value || '').trim();
+  const whatsapp = (document.getElementById('product-whatsapp').value || '').trim();
+  const description = (document.getElementById('product-description').value || '').trim();
+  const photoFile = (document.getElementById('product-photo').files || [])[0];
+  const videoFile = (document.getElementById('product-video').files || [])[0];
+
+  const errEl = document.getElementById('product-error');
+  const msgEl = document.getElementById('product-message');
+  if (errEl) errEl.textContent = '';
+  if (msgEl) msgEl.textContent = '';
+
+  if (!name) { if (errEl) errEl.textContent = 'Product name is required.'; return; }
+  if (price === null || Number.isNaN(price) || price < 0) { if (errEl) errEl.textContent = 'Enter a valid price.'; return; }
+  if (!category) { if (errEl) errEl.textContent = 'Select a category.'; return; }
+  if (!location) { if (errEl) errEl.textContent = 'Enter a location.'; return; }
+
+  const submitBtn = document.getElementById('submit-product-btn');
+  if (submitBtn) submitBtn.disabled = true;
+  if (msgEl) msgEl.textContent = 'Submitting...';
+
+  try {
+    let imageUrl = null;
+    let videoUrl = null;
+
+    // Upload photo if provided
+    if (photoFile) {
+      const fileName = `${currentUser.id}/${Date.now()}_${photoFile.name}`;
+      const { error: uploadError } = await supabaseClient.storage
+        .from(PRODUCT_IMAGES_BUCKET)
+        .upload(fileName, photoFile);
+
+      if (uploadError) {
+        if (errEl) errEl.textContent = 'Failed to upload image.';
+        if (submitBtn) submitBtn.disabled = false;
+        return;
+      }
+
+      const { data } = supabaseClient.storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(fileName);
+      imageUrl = data.publicUrl;
+    }
+
+    // Upload video if provided
+    if (videoFile) {
+      const fileName = `${currentUser.id}/${Date.now()}_${videoFile.name}`;
+      const { error: uploadError } = await supabaseClient.storage
+        .from(PRODUCT_VIDEOS_BUCKET)
+        .upload(fileName, videoFile);
+
+      if (uploadError) {
+        if (errEl) errEl.textContent = 'Failed to upload video.';
+        if (submitBtn) submitBtn.disabled = false;
+        return;
+      }
+
+      const { data } = supabaseClient.storage.from(PRODUCT_VIDEOS_BUCKET).getPublicUrl(fileName);
+      videoUrl = data.publicUrl;
+    }
+
+    // Insert product into database
+    const { error } = await supabaseClient
+      .from('products')
+      .insert([{
+        seller_id: currentUser.id,
+        name,
+        price,
+        category,
+        location,
+        whatsapp,
+        description,
+        image_url: imageUrl,
+        video_url: videoUrl,
+        approval_status: 'approved'
+      }]);
+
+    if (error) {
+      if (errEl) errEl.textContent = 'Failed to submit product.';
+      if (submitBtn) submitBtn.disabled = false;
+      return;
+    }
+
+    if (msgEl) msgEl.textContent = 'Product submitted for approval! 🎉';
+    hideAddProduct();
+    await loadSellerProducts();
+  } catch (err) {
+    console.error('Submit error:', err);
+    if (errEl) errEl.textContent = 'An error occurred.';
+    if (submitBtn) submitBtn.disabled = false;
+  }
+}
+
+/* =====================================================
+   EVENT LISTENERS - ATTACH ALL BUTTON HANDLERS
+   ===================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+  // Authentication buttons
+  document.getElementById('create-seller-btn')?.addEventListener('click', registerSeller);
+  document.getElementById('login-btn')?.addEventListener('click', loginSeller);
+  document.getElementById('logout-btn')?.addEventListener('click', logoutSeller);
+
+  // Product management
+  document.getElementById('add-product-btn')?.addEventListener('click', showAddProduct);
+  document.getElementById('cancel-product-btn')?.addEventListener('click', hideAddProduct);
+  document.getElementById('submit-product-btn')?.addEventListener('click', submitProduct);
+
+  // Search
+  document.getElementById('search-btn')?.addEventListener('click', () => filterProducts());
+  document.getElementById('search')?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') filterProducts();
+  });
+
+  // Sell CTA
+  document.getElementById('sell-cta')?.addEventListener('click', () => {
+    document.getElementById('seller')?.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // Category filters
+  document.querySelectorAll('.cat').forEach(cat => {
+    cat.addEventListener('click', () => {
+      document.querySelectorAll('.cat').forEach(c => c.classList.remove('active'));
+      cat.classList.add('active');
+      selectedCategory = cat.getAttribute('data-cat');
+      filterProducts();
+    });
+  });
+
+  // Initialize
+  loadProducts();
+  checkCurrentUser();
+});
+</script>
+
+</body>
+</html>
