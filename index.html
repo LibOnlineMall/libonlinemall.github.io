@@ -888,8 +888,18 @@ if (product.video_url) {
         <strong>${escapeHtml(product.name)}</strong>
         <div class="price">${formatPrice(product.price)}</div>
         <div class="meta">${escapeHtml(product.location)} · ${escapeHtml(product.category)}</div>
-        ${contactHtml}
-        ${actionsHtml}
+
+<div class="love-row">
+  <button
+    class="love-btn"
+    id="love-btn-${escapeHtml(product.id)}"
+    onclick="toggleProductLove('${escapeHtml(product.id)}')">
+    ❤️ <span id="love-count-${escapeHtml(product.id)}">0</span>
+  </button>
+</div>
+
+${contactHtml}
+${actionsHtml}
       </div>
     </div>
   `;
