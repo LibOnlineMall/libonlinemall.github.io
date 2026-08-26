@@ -942,7 +942,9 @@ function render(list = products) {
     return;
   }
 
-  container.innerHTML = list.map(p => renderProductCard(p, false)).join('');
+container.innerHTML = list.map(p => renderProductCard(p, false)).join('');
+
+list.forEach(p => loadProductLove(p.id));
 
 list.forEach(product => {
   if (product.video_url) {
