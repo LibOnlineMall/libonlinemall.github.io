@@ -1269,9 +1269,14 @@ async function registerSeller() {
       return;
     }
 
-    if (msgEl) msgEl.textContent = '✅ Account created! Please check your email and click the confirmation link to verify your account. Then return here and log in.';
-    currentUser = data?.user || null;
-    updateAuthState();
+    if (msgEl) {
+  msgEl.textContent =
+    '✅ Account created! Please check your email and click the confirmation link to verify your account. Then return here and log in.';
+}
+
+// Do NOT automatically log in an unverified seller
+currentUser = null;
+updateAuthState();
     // clear sensitive fields
     const pwdEl = document.getElementById('seller-password');
     if (pwdEl) pwdEl.value = '';
