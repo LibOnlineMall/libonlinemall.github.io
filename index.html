@@ -1269,7 +1269,7 @@ async function registerSeller() {
       return;
     }
 
-    if (msgEl) msgEl.textContent = 'Account created. Please verify your email if required. You are now logged in.';
+    if (msgEl) msgEl.textContent = '✅ Account created! Please check your email and click the confirmation link to verify your account. Then return here and log in.';
     currentUser = data?.user || null;
     updateAuthState();
     // clear sensitive fields
