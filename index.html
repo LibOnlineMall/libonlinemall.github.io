@@ -1049,82 +1049,55 @@ function formatPrice(value) {
 
   // Submit
 document.getElementById('submit-rating').onclick = async () => {
-  if (selectedRating === 0) {
-    alert('Please select a rating from 1 to 5 stars.');
-    return;
-  }
 
-  const reviewText =
-    document.getElementById('seller-review-text').value.trim();
-
-  const submitButton =
-    document.getElementById('submit-rating');
-
-  submitButton.disabled = true;
-  submitButton.textContent = 'Submitting...';
-
-  try {
-    const reviewData = {
-      seller_id: sellerId,
-      visitor_id: visitorId,
-      rating: selectedRating,
-      review: reviewText || null
-    };
-
-    console.log('Submitting review:', reviewData);
-
-    const result = await Promise.race([
-      supabase
-        .from('seller_reviews')
-        .insert(reviewData),
-
-      new Promise((_, reject) =>
-        setTimeout(
-          () => reject(new Error('Request timed out. Please check your internet connection.')),
-          10000
-        )
-      )
-    ]);
-
-    const { error } = result;
-
-    if (error) {
-      console.error('Supabase review error:', error);
-
-      if (error.code === '23505') {
-        alert('You have already reviewed this seller from this browser.');
-      } else {
-        alert(`Review failed: ${error.message}`);
-      }
-
+    if (selectedRating === 0) {
+      alert('Please select a rating from 1 to 5 stars.');
       return;
     }
 
-    localStorage.setItem(
-      `reviewed_seller_${sellerId}`,
-      'true'
-    );
+    const reviewText =
+      document.getElementById('seller-review-text').value.trim();
+
+    const submitButton =
+      document.getElementById('submit-rating');
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Submitting...';
+
+    const { error } = await supabase
+      .from('seller_reviews')
+      .insert({
+        seller_id: sellerId,
+        visitor_id: visitorId,
+        rating: selectedRating,
+        review: reviewText || null
+      });
+
+    if (error) {
+      console.error('Error submitting seller review:', error);
+
+      if (error.code === '23505') {
+        alert('You have already reviewed this seller.');
+      } else {
+        alert('Sorry, your review could not be submitted. Please try again.');
+      }
+
+      submitButton.disabled = false;
+      submitButton.textContent = 'Submit Review';
+      return;
+    }
+
+    // Remember that this browser reviewed this seller
+    localStorage.setItem(existingReviewKey, 'true');
 
     overlay.remove();
 
-    await loadSellerRating(productId, sellerId);
+    // Update rating immediately
+    loadSellerRating(productId, sellerId);
 
     alert('⭐ Thank you! Your review has been submitted.');
-
-  } catch (error) {
-    console.error('Review submission error:', error);
-
-    alert(
-      error.message ||
-      'Something went wrong while submitting your review.'
-    );
-
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = 'Submit Review';
+  };
   }
-};
-
 /* =====================================================
    RENDERING
    ===================================================== */
