@@ -1068,7 +1068,7 @@ document.getElementById('submit-rating').onclick = async () => {
       .from('seller_reviews')
       .insert({
         seller_id: sellerId,
-        visitor_id: visitorId,
+        reviewer_id: visitorId,
         rating: selectedRating,
         review: reviewText || null
       });
