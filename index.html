@@ -948,6 +948,11 @@ if (product.video_url) {
         <div class="seller-rating" id="seller-rating-${escapeHtml(product.id)}">
   ⭐ 0.0 (0 reviews)
 </div>
+<button
+  class="rate-seller-btn"
+  onclick="openSellerRating('${escapeHtml(product.seller_id)}')">
+  ⭐ Rate Seller
+</button>
 
 <div class="love-row">
   <button
