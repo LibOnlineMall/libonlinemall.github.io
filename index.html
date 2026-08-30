@@ -854,6 +854,39 @@ function formatPrice(value) {
   return Number.isNaN(n) ? escapeHtml(String(value)) : usdFmt.format(n);
 }
 
+  async function loadSellerRating(productId, sellerId) {
+  const ratingEl = document.getElementById(`seller-rating-${productId}`);
+  if (!ratingEl || !sellerId) return;
+
+  const { data, error } = await supabase
+    .from('seller_reviews')
+    .select('rating')
+    .eq('seller_id', sellerId);
+
+  if (error) {
+    console.error('Error loading seller rating:', error);
+    return;
+  }
+
+  const reviews = data || [];
+  const count = reviews.length;
+
+  if (count === 0) {
+    ratingEl.textContent = '⭐ 0.0 (0 reviews)';
+    return;
+  }
+
+  const total = reviews.reduce(
+    (sum, review) => sum + Number(review.rating),
+    0
+  );
+
+  const average = (total / count).toFixed(1);
+
+  ratingEl.textContent =
+    `⭐ ${average} (${count} ${count === 1 ? 'review' : 'reviews'})`;
+  }
+  
 /* =====================================================
    RENDERING
    ===================================================== */
