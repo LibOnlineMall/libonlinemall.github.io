@@ -947,6 +947,7 @@ function render(list = products) {
 
 container.innerHTML = list.map(p => renderProductCard(p, false)).join('');
 
+list.forEach(p => loadSellerRating(p.id, p.seller_id));
 list.forEach(p => loadProductLove(p.id));
 
 list.forEach(product => {
