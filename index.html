@@ -886,7 +886,218 @@ function formatPrice(value) {
   ratingEl.textContent =
     `⭐ ${average} (${count} ${count === 1 ? 'review' : 'reviews'})`;
   }
-  
+
+  function openSellerRating(sellerId, productId) {
+  // Create a unique ID for this browser
+  let visitorId = localStorage.getItem('libonline_review_visitor_id');
+
+  if (!visitorId) {
+    visitorId =
+      'visitor_' +
+      Date.now() +
+      '_' +
+      Math.random().toString(36).substring(2, 10);
+
+    localStorage.setItem('libonline_review_visitor_id', visitorId);
+  }
+
+  // Prevent duplicate review from this browser
+  const existingReviewKey = `reviewed_seller_${sellerId}`;
+
+  if (localStorage.getItem(existingReviewKey)) {
+    alert('You have already reviewed this seller from this browser.');
+    return;
+  }
+
+  // Create popup
+  const overlay = document.createElement('div');
+  overlay.id = 'seller-rating-modal';
+
+  overlay.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+  `;
+
+  overlay.innerHTML = `
+    <div style="
+      background:white;
+      width:100%;
+      max-width:420px;
+      border-radius:18px;
+      padding:25px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    ">
+
+      <h2 style="margin-top:0;text-align:center;">
+        ⭐ Rate This Seller
+      </h2>
+
+      <p style="text-align:center;color:#667085;">
+        How was your experience with this seller?
+      </p>
+
+      <div id="rating-stars"
+        style="
+          display:flex;
+          justify-content:center;
+          gap:8px;
+          margin:20px 0;
+        ">
+
+        ${[1,2,3,4,5].map(star => `
+          <button
+            type="button"
+            class="rating-star"
+            data-rating="${star}"
+            style="
+              border:none;
+              background:none;
+              font-size:38px;
+              cursor:pointer;
+              opacity:0.35;
+            ">
+            ★
+          </button>
+        `).join('')}
+
+      </div>
+
+      <textarea
+        id="seller-review-text"
+        placeholder="Write a review (optional)"
+        maxlength="500"
+        style="
+          width:100%;
+          min-height:100px;
+          box-sizing:border-box;
+          padding:12px;
+          border:1px solid #d0d5dd;
+          border-radius:10px;
+          resize:vertical;
+          font-size:15px;
+        "
+      ></textarea>
+
+      <div style="display:flex;gap:10px;margin-top:18px;">
+
+        <button
+          type="button"
+          id="cancel-rating"
+          style="
+            flex:1;
+            padding:13px;
+            border:none;
+            border-radius:10px;
+            background:#e5e7eb;
+            cursor:pointer;
+            font-weight:bold;
+          ">
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          id="submit-rating"
+          style="
+            flex:1;
+            padding:13px;
+            border:none;
+            border-radius:10px;
+            background:#087f5b;
+            color:white;
+            cursor:pointer;
+            font-weight:bold;
+          ">
+          Submit Review
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  let selectedRating = 0;
+
+  // Star selection
+  overlay.querySelectorAll('.rating-star').forEach(button => {
+    button.addEventListener('click', () => {
+
+      selectedRating = Number(button.dataset.rating);
+
+      overlay.querySelectorAll('.rating-star').forEach(star => {
+        star.style.opacity =
+          Number(star.dataset.rating) <= selectedRating
+            ? '1'
+            : '0.35';
+      });
+
+    });
+  });
+
+  // Cancel
+  document.getElementById('cancel-rating').onclick = () => {
+    overlay.remove();
+  };
+
+  // Submit
+  document.getElementById('submit-rating').onclick = async () => {
+
+    if (selectedRating === 0) {
+      alert('Please select a rating from 1 to 5 stars.');
+      return;
+    }
+
+    const reviewText =
+      document.getElementById('seller-review-text').value.trim();
+
+    const submitButton =
+      document.getElementById('submit-rating');
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Submitting...';
+
+    const { error } = await supabase
+      .from('seller_reviews')
+      .insert({
+        seller_id: sellerId,
+        visitor_id: visitorId,
+        rating: selectedRating,
+        review: reviewText || null
+      });
+
+    if (error) {
+      console.error('Error submitting seller review:', error);
+
+      if (error.code === '23505') {
+        alert('You have already reviewed this seller.');
+      } else {
+        alert('Sorry, your review could not be submitted. Please try again.');
+      }
+
+      submitButton.disabled = false;
+      submitButton.textContent = 'Submit Review';
+      return;
+    }
+
+    // Remember that this browser reviewed this seller
+    localStorage.setItem(existingReviewKey, 'true');
+
+    overlay.remove();
+
+    // Update rating immediately
+    loadSellerRating(productId, sellerId);
+
+    alert('⭐ Thank you! Your review has been submitted.');
+  };
+  }
 /* =====================================================
    RENDERING
    ===================================================== */
