@@ -888,9 +888,7 @@ function formatPrice(value) {
   }
 
   function openSellerRating(sellerId, productId) {
-  // Create a unique ID for this browser
-  let visitorId = localStorage.getItem('libonline_review_visitor_id');
-
+  const visitorId = getVisitorId();
   if (!visitorId) {
     visitorId =
       'visitor_' +
