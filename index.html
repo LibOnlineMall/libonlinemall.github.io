@@ -1062,8 +1062,8 @@ document.getElementById('submit-rating').onclick = async () => {
     submitButton.disabled = true;
     submitButton.textContent = 'Submitting...';
 
-    const { error } = await supabase
-      .from('seller_reviews')
+    const { error } = await supabaseClient
+  .from('seller_reviews')
       .insert({
         seller_id: sellerId,
         reviewer_id: visitorId,
