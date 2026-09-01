@@ -860,7 +860,7 @@ function formatPrice(value) {
 
   const { data, error } = await supabaseClient
     .from('seller_reviews')
-    .select('rating')
+    .select('rating, review')
     .eq('seller_id', sellerId);
 
   if (error) {
