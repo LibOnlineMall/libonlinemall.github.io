@@ -869,7 +869,22 @@ function formatPrice(value) {
   }
 
   const reviews = data || [];
-  const count = reviews.length;
+
+const reviewsEl = document.getElementById(`seller-reviews-${productId}`);
+
+if (reviewsEl) {
+  reviewsEl.innerHTML = reviews
+    .filter(review => review.review)
+    .map(review => `
+      <div class="seller-review-item">
+        <span>⭐ ${Number(review.rating)}</span>
+        <span>${escapeHtml(review.review)}</span>
+      </div>
+    `)
+    .join('');
+}
+
+const count = reviews.length;
 
   if (count === 0) {
     ratingEl.textContent = '⭐ 0.0 (0 reviews)';
