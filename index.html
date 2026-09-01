@@ -1214,6 +1214,7 @@ if (product.video_url) {
         <strong>${escapeHtml(product.name)}</strong>
         <div class="price">${formatPrice(product.price)}</div>
         <div class="meta">${escapeHtml(product.location)} · ${escapeHtml(product.category)}</div>
+        <div class="description">${escapeHtml(product.description || '')}</div>
         <div class="seller-rating" id="seller-rating-${escapeHtml(product.id)}">
   ⭐ 0.0 (0 reviews)
 </div>
