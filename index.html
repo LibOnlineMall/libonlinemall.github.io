@@ -873,15 +873,29 @@ function formatPrice(value) {
 const reviewsEl = document.getElementById(`seller-reviews-${productId}`);
 
 if (reviewsEl) {
-  reviewsEl.innerHTML = reviews
-    .filter(review => review.review)
-    .map(review => `
-      <div class="seller-review-item">
+  const writtenReviews = reviews.filter(review => review.review);
+
+  reviewsEl.innerHTML = writtenReviews
+    .map((review, index) => `
+      <div
+        class="seller-review-item"
+        style="${index >= 2 ? 'display:none;' : ''}">
         <span>⭐ ${Number(review.rating)}</span>
         <span>${escapeHtml(review.review)}</span>
       </div>
     `)
     .join('');
+
+  if (writtenReviews.length > 2) {
+    reviewsEl.innerHTML += `
+      <button
+        class="see-more-reviews"
+        onclick="toggleSellerReviews('${productId}')"
+        data-expanded="false">
+        See more reviews (${writtenReviews.length - 2})
+      </button>
+    `;
+  }
 }
 
 const count = reviews.length;
