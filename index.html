@@ -915,6 +915,37 @@ const count = reviews.length;
   ratingEl.textContent =
     `⭐ ${average} (${count} ${count === 1 ? 'review' : 'reviews'})`;
   }
+  function toggleSellerReviews(productId) {
+  const reviewsEl =
+    document.getElementById(`seller-reviews-${productId}`);
+
+  if (!reviewsEl) return;
+
+  const reviews =
+    reviewsEl.querySelectorAll('.seller-review-item');
+
+  const button =
+    reviewsEl.querySelector('.see-more-reviews');
+
+  if (!button) return;
+
+  const expanded = button.dataset.expanded === 'true';
+
+  reviews.forEach((review, index) => {
+    if (index >= 2) {
+      review.style.display = expanded ? 'none' : 'flex';
+    }
+  });
+
+  if (expanded) {
+    button.textContent =
+      `See more reviews (${reviews.length - 2})`;
+    button.dataset.expanded = 'false';
+  } else {
+    button.textContent = 'Show fewer reviews';
+    button.dataset.expanded = 'true';
+  }
+  }
 
   function openSellerRating(sellerId, productId) {
   const visitorId = getVisitorId();
