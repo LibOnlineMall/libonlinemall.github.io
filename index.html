@@ -1572,10 +1572,18 @@ async function registerSeller() {
 
   try {
     // Supabase v2: pass metadata as the second argument
-    const { data, error } = await supabaseClient.auth.signUp(
-      { email, password },
-      { data: { full_name: name, business_name: business, phone, location } }
-      );
+    const { data, error } = await supabaseClient.auth.signUp({
+  email,
+  password,
+  options: {
+    data: {
+      full_name: name,
+      business_name: business,
+      phone,
+      location
+    }
+  }
+});
 
     if (error) {
       if (errorEl) errorEl.textContent = error.message || 'Sign up failed.';
