@@ -1212,7 +1212,16 @@ if (product.video_url) {
     <div class="card" aria-label="${escapeHtml(product.name)}">
       ${photoHtml}
       <div class="body">
-        <strong>${escapeHtml(product.name)}</strong>
+
+  ${
+    sellerProfiles[product.seller_id]?.business_name
+      ? `<div class="seller-business-name">
+           🏪 ${escapeHtml(sellerProfiles[product.seller_id].business_name)}
+         </div>`
+      : ''
+  }
+
+  <strong>${escapeHtml(product.name)}</strong>
         <div class="price">${formatPrice(product.price)}</div>
         <div class="meta">${escapeHtml(product.location)} · ${escapeHtml(product.category)}</div>
         <div class="description">${escapeHtml(product.description || '')}</div>
