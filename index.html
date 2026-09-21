@@ -1452,22 +1452,40 @@ document.getElementById('video-modal').addEventListener('click', (e) => {
    ===================================================== */
 async function loadProducts() {
   try {
-    const { data, error } = await supabaseClient
+    // Load approved products
+    const { data: productData, error: productError } = await supabaseClient
       .from('products')
       .select('*')
       .eq('approval_status', 'approved');
 
-    if (error) {
-      console.error('Failed to load products:', error);
+    if (productError) {
+      console.error('Failed to load products:', productError);
       return;
     }
 
-    products = data || [];
+    products = productData || [];
+
+    // Load seller profiles
+    const { data: profileData, error: profileError } = await supabaseClient
+      .from('profiles')
+      .select('id, business_name');
+
+    if (profileError) {
+      console.error('Failed to load seller profiles:', profileError);
+    } else {
+      sellerProfiles = {};
+
+      (profileData || []).forEach(profile => {
+        sellerProfiles[profile.id] = profile;
+      });
+    }
+
     render(products);
+
   } catch (err) {
     console.error('Error loading products:', err);
   }
-}
+  }
 
 async function loadSellerProducts() {
   if (!currentUser) return;
