@@ -1215,10 +1215,13 @@ if (product.video_url) {
 
   ${
     sellerProfiles[product.seller_id]?.business_name
-      ? `<div class="seller-business-name">
-           🏪 ${escapeHtml(sellerProfiles[product.seller_id].business_name)}
-         </div>`
-      : ''
+  ? `<button
+       type="button"
+       class="seller-business-name"
+       onclick="openSellerStore('${escapeHtml(product.seller_id)}')">
+       🏪 ${escapeHtml(sellerProfiles[product.seller_id].business_name)}
+     </button>`
+  : ''
   }
 
   <strong>${escapeHtml(product.name)}</strong>
