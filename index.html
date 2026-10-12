@@ -1279,6 +1279,139 @@ list.forEach(product => {
 });
       }
 
+  // Open a seller's public storefront
+async function openSellerStore(sellerId) {
+  if (!sellerId) {
+    alert('Seller information is unavailable.');
+    return;
+  }
+
+  const container = document.getElementById('products');
+  if (!container) return;
+
+  // Save the current marketplace view so buyers can return
+  if (!window.previousMarketplaceProducts) {
+    window.previousMarketplaceProducts = products;
+  }
+
+  container.innerHTML = `
+    <div class="form-box" role="status">
+      <p>Loading seller's storefront...</p>
+    </div>
+  `;
+
+  try {
+    // Retrieve the seller's profile
+    const { data: profile, error: profileError } = await supabaseClient
+      .from('profiles')
+      .select('id, business_name, location')
+      .eq('id', sellerId)
+      .maybeSingle();
+
+    if (profileError) {
+      console.error('Failed to load seller profile:', profileError);
+      container.innerHTML = `
+        <div class="form-box">
+          <strong>Unable to load this seller's profile.</strong>
+          <button type="button" onclick="closeSellerStore()">
+            Back to Marketplace
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    // Retrieve only this seller's approved products
+    const { data: sellerProducts, error: productsError } = await supabaseClient
+      .from('products')
+      .select('*')
+      .eq('seller_id', sellerId)
+      .eq('approval_status', 'approved');
+
+    if (productsError) {
+      console.error('Failed to load seller products:', productsError);
+      container.innerHTML = `
+        <div class="form-box">
+          <strong>Unable to load this seller's products.</strong>
+          <button type="button" onclick="closeSellerStore()">
+            Back to Marketplace
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    // Display the seller's profile and products
+    container.innerHTML = `
+      <div class="form-box seller-store-header">
+        <h2>🏪 ${escapeHtml(profile?.business_name || 'Seller Store')}</h2>
+        <p>${escapeHtml(profile?.location || '')}</p>
+        <button
+          type="button"
+          class="store-back-btn"
+          onclick="closeSellerStore()">
+          ← Back to Marketplace
+        </button>
+      </div>
+
+      <div id="seller-store-products" class="grid"></div>
+    `;
+
+    const storeProductsContainer =
+      document.getElementById('seller-store-products');
+
+    if (!sellerProducts || sellerProducts.length === 0) {
+      storeProductsContainer.innerHTML = `
+        <div class="form-box">
+          <p>This seller has no approved products available right now.</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Reuse existing product cards and their features
+    storeProductsContainer.innerHTML = sellerProducts
+      .map(product => renderProductCard(product, false))
+      .join('');
+
+    // Load existing product features
+    sellerProducts.forEach(product => {
+      loadSellerRating(product.id, product.seller_id);
+      loadProductLove(product.id);
+
+      if (product.video_url) {
+        displayVideoViews(product.id);
+      }
+    });
+
+  } catch (error) {
+    console.error('Error opening seller storefront:', error);
+
+    container.innerHTML = `
+      <div class="form-box">
+        <strong>Something went wrong while opening this store.</strong>
+        <button type="button" onclick="closeSellerStore()">
+          Back to Marketplace
+        </button>
+      </div>
+    `;
+  }
+}
+
+
+// Return to the main marketplace
+function closeSellerStore() {
+  const previousProducts = window.previousMarketplaceProducts;
+
+  window.previousMarketplaceProducts = null;
+
+  if (previousProducts) {
+    products = previousProducts;
+  }
+
+  render(products);
+}
+
   async function updateSellerAnalytics() {
   if (!currentUser) return;
 
